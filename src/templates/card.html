@@ -1,0 +1,12 @@
+
+<a href = "{{ instance.videoLink }}">
+    <div class="card" style="width: 18rem; min-height: 508px;">
+      <img src="{{ instance.thumbnail_high }}" class="card-img-top" height = 280px alt="...">
+      <br/>
+      <div class="card-body">
+        <h5 class="card-title">{{ instance.title }}</h5>
+        <p class="card-text">{{ instance.description|truncatewords:13 }}</p>
+      </div>
+    </div>
+</a>
+    

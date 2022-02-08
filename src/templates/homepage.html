@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method = 'GET' action ="{% url 'dashboard_search' %}" class="form">
+        <input class="form-control" type="search" placeholder="Search by title.." name = 'title' aria-label="Search" value = '{{ request.GET.title }}' >
+        <input class="form-control" type="search" placeholder="Search by description.." name = 'description' aria-label="Search" value = '{{ request.GET.description }}' >
+        <input type="submit">
+    </form>
+
+
+    {% if video_list %}
+        <div class='container-fluid'><div class="alert alert-primary" role="alert">Latest News on your mouse clicks</div></div>
+
+        <div class = 'container-fluid'>
+            <div class = 'row'>
+            {% for video in video_list %}
+
+                <div class = 'col-sm-4'>
+                
+                {% include "card.html" with instance=video %}
+                <hr/></div>
+            {% endfor %}  
+            </div>
+        </div></div>
+    {% else %}
+        <div class='container'><div class="alert alert-danger" role="alert">Please wait! We are working hard to pull videos</div></div>
+    {% endif %}
+   
+    
+
+{% endblock content %}
+
