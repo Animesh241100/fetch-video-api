@@ -9,7 +9,7 @@ from video_data.models import VideoData
 
 
 # prepare a circular list of existing API Keys
-with open("youtube_api_keys.txt", "r") as fd:
+with open("/code/youtube_api_keys.txt", "r") as fd:      # DOXER
     api_keys = fd.read().splitlines()
 
 api_keys.reverse()
@@ -54,3 +54,5 @@ for video in videos_array:
             thumbnail_high = video_data['thumbnails']['high']['url'],
             channel_title = video_data['channelTitle'],
         )
+
+print("Fetched data from youtube Successfully!!")
