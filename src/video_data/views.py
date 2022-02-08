@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Q
+
 
 from .models import VideoData
 from .serializers import VideoDataSerializer
@@ -58,6 +60,21 @@ def add_api_key(request):
         print("Exception in add_api_key: ", Arg)
         return Response({"exception" : "An Exception Occured"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
+@api_view(['GET'])
+def optimal_search_query(request):
+    paginator = PageNumberPagination()
+    title = request.GET.get('title', '').split()
+    desc = request.GET.get('description', '').split()
+    print(title, desc)
+    if (title ==  [] and desc == []):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    lookup = Q(id__in=[])
+    for item in title:
+        lookup.add(Q(title__icontains=item), Q.OR)
+    for item in desc:
+        lookup.add(Q(description__icontains=item), Q.OR)
+    video_data_objs = VideoData.objects.filter(lookup).order_by('-pub_datetime').distinct()
+    result_page = paginator.paginate_queryset(video_data_objs, request)
+    serializer = VideoDataSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
