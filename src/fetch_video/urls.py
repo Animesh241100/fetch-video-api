@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import dashboard_list_view, dashboard_search_view
 
 urlpatterns = [
+    path('', dashboard_list_view),
+    path('dashboard_search/', dashboard_search_view, name="dashboard_search"),
     path('admin/', admin.site.urls),
     path('api/', include('video_data.urls')),
 ]
