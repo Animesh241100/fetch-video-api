@@ -24,7 +24,7 @@ This means we are good to go 💪🏻
 Please note,
 * By default the dashboard page opens and you are seeing the latest fetched videos here.
 * The chosen predefined search query is **news**.
-* On this dashboard, you can search both via title and search bar, and this will run an index optimized query for this and return the list of matched videos
+* On this dashboard, you can search both via title and description(both need to be nonempty) on search bar, and this will run an index optimized query for this and return the list of matched videos
 * You can click on these video cards and you will be redirected to the respective link on youtube
 * For admin access, go to http://127.0.0.1:8000/admin
     * username: admin
@@ -63,7 +63,7 @@ Sample Response: (paginated)
 **URL**: http://127.0.0.1:8000/api/search/
 
 * You have to pass the 'title' and 'description' as query parameters to this API
-* This API implements basic search feature, i.e. a video data will be returned only if its title and description exactly matches with the one in the query
+* This API implements basic search feature, i.e. a video data will be returned only if its title and description exactly matches with ones supplied in the query
 
 Request: (Query params)
 ```
@@ -102,7 +102,7 @@ Request
 Response: 
 ```
 201 Created (if key gets added)
-400 (if emtpy key)
+400 (if empty key)
 500 (if exception)
 ```
 
