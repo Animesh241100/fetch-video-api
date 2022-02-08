@@ -1,0 +1,6 @@
+# To run the same script every 20 secs
+
+* * * * * (/usr/local/bin/python3 /code/test_fetch_script.py >> /var/log/cron.log 2>&1)
+* * * * * (sleep 20; /usr/local/bin/python3 /code/test_fetch_script.py >> /var/log/cron.log 2>&1)
+* * * * * (sleep 30; /usr/local/bin/python3 /code/test_fetch_script.py >> /var/log/cron.log 2>&1)
+
