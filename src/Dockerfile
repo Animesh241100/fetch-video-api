@@ -2,22 +2,24 @@
 FROM python:3.8
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+
 WORKDIR /code
 COPY . /code/
-# COPY requirements.txt /code/
+
+# install requirements 
 RUN pip3 install -r requirements.txt
 
-RUN apt-get update && apt-get -y install cron
+# install cron(for background process) and nano(for debugging through the files if needed)
+RUN apt-get update && apt-get -y install cron && apt-get -y install nano
 
-COPY hello-cron /etc/cron.d/hello-cron
+COPY fetch-data-crontab /etc/cron.d/fetch-data-crontab
+
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/fetch-data-crontab
 
 # Apply cron job
-RUN crontab /etc/cron.d/hello-cron
+RUN crontab /etc/cron.d/fetch-data-crontab
  
-# Create the log file to be able to run tail
+# Create the log file to be able to tail
 RUN touch /var/log/cron.log
  
-# Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
