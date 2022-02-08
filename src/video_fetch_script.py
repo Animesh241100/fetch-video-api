@@ -8,19 +8,18 @@ from itertools import cycle
 from video_data.models import VideoData
 
 
+# prepare a circular list of existing API Keys
 with open("youtube_api_keys.txt", "r") as fd:
     api_keys = fd.read().splitlines()
 
 api_keys.reverse()
 print(api_keys)
-# circular list of API Keys
 api_keys = cycle(api_keys)
-# api_keys = cycle(['AIzaSyA_kfQA0jeiODALNcuyV6ZSMWx-bUBl7E0', 'AIzaSyCFjgyw53c4AE2nUORVR7IfCsgKReYha8o', 'AIzaSyA_TxCtrqPY2baDTHGo4zzftkw_dcH9JM4', 'AIzaSyBqmw3H4ssowhYX_7kT9O1WbYqrTokgJU0', 'AIzaSyDEU4aWn6ukSqbJzhrKh_09WZlkWsCKpsg', 'AIzaSyCa6lQYPnOVxS4vuofmZlKSoHOsn8_s5rw', 'AIzaSyBWtJZdcLLTtPqGUpeGUzCQ0d_lUAe7HUk'])       # secret key
 
 
-# cycle through all the API keys in case quota exhausted
+# cycle through all the API keys till you find a key for which quota is not exhausted
 for api_key in api_keys:
-    try: # if any one API key executes successfully, break the loop and save the data
+    try: # if any one API key executes successfully, break the loop
         service = build('youtube', 'v3', developerKey=api_key)
         request = service.search().list(
             part='id, snippet',
@@ -30,32 +29,14 @@ for api_key in api_keys:
             maxResults=20,
             publishedAfter='2022-02-07T11:36:09+00:00'
         )
-        response = request.execute()
+        response = request.execute()  # make request to youtube API
         print(f"Used the API-KEY: {api_key}")
         break
     except Exception as Arg:
         print(f"API-KEY: {api_key} causes exception {Arg}. Skipping to next ...")
 
 
-# api_key = "AIzaSyCa6lQYPnOVxS4vuofmZlKSoHOsn8_s5rw"
-# service = build('youtube', 'v3', developerKey=api_key)
-# request = service.search().list(
-#     part='id, snippet',
-#     q='world news',
-#     type='video',
-#     order='date',
-#     maxResults=20,
-#     publishedAfter='2022-02-07T11:36:09+00:00'
-# )
-# # try: # if any one API key executes successfully, break the loop and save the data
-# response = request.execute()
-# print(f"I worked {api_key}")
-#     # break
-# # except:
-# #     print(f"Limit exhausted switching to other api key: {api_key}")
-
-
-
+# for each and every video data, save it in the database if it doesn't already exist
 videos_array = response['items']
 for video in videos_array:
     youtube_pk = video['id']['videoId']
